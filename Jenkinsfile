@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh """
                 sonar-scanner \
-                  -Dsonar.projectKey=react-hotstar \
+                  -Dsonar.projectKey=hotstar-app \
                   -Dsonar.sources=src \
                   -Dsonar.exclusions=**/node_modules/**,**/build/** \
                   -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
