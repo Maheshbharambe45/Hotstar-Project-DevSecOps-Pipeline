@@ -22,20 +22,23 @@ pipeline {
                 sh 'npm install'
             }
         }
-
+        
         stage('SonarQube Scan') {
             steps {
-                sh """
-                sonar-scanner \
-                  -Dsonar.projectKey=hotstar-app \
-                  -Dsonar.sources=src \
-                  -Dsonar.exclusions=**/node_modules/**,**/build/** \
-                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                  -Dsonar.host.url=${SONAR_HOST} \
-                  -Dsonar.login=${SONAR_TOKEN}
-                """
+                withCredentials([string(credentialsId: 'sonar-token-id', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        sonar-scanner \
+                        -Dsonar.projectKey=hotstar-app \
+                        -Dsonar.sources=src \
+                        -Dsonar.exclusions=**/node_modules/**,**/build/** \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                        -Dsonar.host.url=http://3.111.96.69:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
             }
         }
+
 
         stage('Build Docker Image') {
             steps {
