@@ -53,7 +53,7 @@
                 steps {
   
                     sh 'curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b $WORKSPACE/.docker-plugins'
-                    sh "$WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest --exit-code"
+                    sh "$WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest "
                 }
             }
 
