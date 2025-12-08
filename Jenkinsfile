@@ -108,7 +108,7 @@
                         -v ${WORKSPACE}/zap-output:/zap/wrk:rw \
                         ghcr.io/zaproxy/zaproxy:stable \
                         zap-baseline.py \
-                            -t https://${target} \
+                            -t http://${target} \
                             -r ${ZAP_REPORT} \
                             -I \
                             -m 5
