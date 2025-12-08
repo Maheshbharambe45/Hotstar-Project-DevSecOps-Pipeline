@@ -90,13 +90,14 @@
             stage('OWASP ZAP Scan') {
                 steps {
                 sh """
-                docker run --rm \
+                    docker run --rm \
                     -v $WORKSPACE:/zap/wrk/:rw \
                     ghcr.io/zaproxy/zaproxy:stable \
-                    zap-baseline.py \
+                    zap‑baseline.py \
                     -t ${env.APP_URL} \
                     -r ${ZAP_REPORT} \
-                    --exitcode 0 --maxduration 5
+                    -I \
+                    --maxduration 5
                 """
             }
             }
