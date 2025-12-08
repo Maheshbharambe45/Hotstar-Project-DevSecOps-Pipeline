@@ -88,7 +88,7 @@
                     if (!url) {
                         error "Service hostname not found. Aborting."
                     }
-                    env.APP_URL = url
+                    env.APP_URL =  readFile('app_url.txt').trim()
                     echo "Deployed App URL: ${env.APP_URL}"
 
                 }
