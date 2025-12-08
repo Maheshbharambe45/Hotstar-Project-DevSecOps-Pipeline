@@ -29,6 +29,7 @@ pipeline {
                 sh '''
                     sonar-scanner \
                     -Dsonar.projectKey=hotstar-app \
+                    -Dsonar.projectName=hotstar-app \
                     -Dsonar.sources=src \
                     -Dsonar.exclusions=**/node_modules/**,**/build/** \
                     -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
@@ -38,7 +39,6 @@ pipeline {
             }
         }
     }
-
 
 
         stage('Build Docker Image') {
