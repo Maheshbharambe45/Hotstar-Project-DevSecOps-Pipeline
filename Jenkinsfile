@@ -83,8 +83,14 @@
                     ls -la
                     cat app_url.txt
                 """
-                env.APP_URL = readFile('app_url.txt').trim()
-                echo "Deployed App URL: ${env.APP_URL}"
+                    sh 'cat app_url.txt'
+                    def url = readFile('app_url.txt').trim()
+                    if (!url) {
+                        error "Service hostname not found. Aborting."
+                    }
+                    env.APP_URL = url
+                    echo "Deployed App URL: ${env.APP_URL}"
+
                 }
             }
             }
