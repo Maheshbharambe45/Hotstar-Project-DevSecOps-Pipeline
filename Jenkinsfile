@@ -52,8 +52,8 @@
             stage('Docker Scout Scan') {
                 steps {
   
-                    sh 'curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b /usr/local/bin'
-                    sh "docker-scout cves ${DOCKER_IMAGE}:latest --exit-code --only-severity critical,high || true"
+                    sh 'curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b $WORKSPACE/.docker-plugins'
+                    sh "$WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest --exit-code"
                 }
             }
 
@@ -95,14 +95,14 @@
             stage('OWASP ZAP Scan') {
             steps {
                 sh """
-                docker run --rm \
-                    -v \$WORKSPACE:/zap/wrk/:rw \
+                    docker run --rm \
+                    -v $WORKSPACE:/zap/wrk/:rw \
                     ghcr.io/zaproxy/zaproxy:stable \
                     zap-baseline.py \
-                    -t https://\$APP_URL \
-                    -r \$ZAP_REPORT \
+                    -t https://$APP_URL \
+                    -r ${ZAP_REPORT} \
                     -I \
-                    --maxduration 5
+                    -m 5
                 """
             }
             }
