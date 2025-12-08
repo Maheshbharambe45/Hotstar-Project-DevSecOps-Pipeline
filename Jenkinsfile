@@ -80,6 +80,7 @@
                     sleep 120
                     APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
                     echo \$APP_URL > app_url.txt
+                    cat app_url.txt
                 """
                 env.APP_URL = readFile('app_url.txt').trim()
                 echo "Deployed App URL: ${env.APP_URL}"
