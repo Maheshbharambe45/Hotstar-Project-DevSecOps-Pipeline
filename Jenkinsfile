@@ -80,6 +80,7 @@
                     sleep 120
                     APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
                     echo \$APP_URL > app_url.txt
+                    ls -la
                     cat app_url.txt
                 """
                 env.APP_URL = readFile('app_url.txt').trim()
@@ -94,8 +95,8 @@
                     docker run --rm \
                     -v $WORKSPACE:/zap/wrk/:rw \
                     ghcr.io/zaproxy/zaproxy:stable \
-                    zap‑baseline.py \
-                    -t ${env.APP_URL} \
+                    zap-baseline.py \
+                    -t https://$APP_URL \
                     -r ${ZAP_REPORT} \
                     -I \
                     --maxduration 5
