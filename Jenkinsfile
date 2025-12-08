@@ -73,7 +73,7 @@
             stage('Deploy to EKS') {
             steps {
                 sh """
-                aws eks update‑kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+                aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
                 kubectl apply -f deployment.yml
                 kubectl apply -f service.yml
                 sleep 120
