@@ -2,7 +2,7 @@
         agent any
 
         environment {
-            APP_URL = ''
+            // APP_URL = ''
             DOCKER_IMAGE = "maheshbharambe45/hotstar-app"
             ZAP_REPORT = 'zap_report.html'
             SONAR_HOST = 'http://3.111.96.69:9000'
@@ -73,39 +73,47 @@
             }
 
             stage('Deploy to EKS') {
-            steps {
-                sh """
-                aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                kubectl apply -f deployment.yml
-                kubectl apply -f service.yml
-                sleep 120
-                kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
-                """
-                script {
-                def url = readFile('app_url.txt').trim()
-                if (!url) {
-                    error "Service hostname not found — APP_URL is empty"
+                steps {
+                    script {
+                    sh """
+                        aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+                        kubectl apply -f deployment.yml
+                        kubectl apply -f service.yml
+                        sleep 120
+                        kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
+                    """
+
+                    def url = readFile('app_url.txt').trim()
+                    if (!url) {
+                        error "Service hostname not found — aborting"
+                    }
+                    echo "Deployed App URL: ${url}"
+                    env.APP_URL = url   
+                    }
                 }
-                env.APP_URL = url
-                echo "Deployed App URL: ${env.APP_URL}"
                 }
-            }
-            }
 
             stage('OWASP ZAP Scan') {
-            steps {
-                sh """
-                    docker run --rm \
-                    -v $WORKSPACE:/zap/wrk/:rw \
-                    ghcr.io/zaproxy/zaproxy:stable \
-                    zap-baseline.py \
-                    -t https://$APP_URL \
-                    -r ${ZAP_REPORT} \
-                    -I \
-                    -m 5
-                """
-            }
-            }
+                steps {
+                    script {
+                    def target = env.APP_URL ?: readFile('app_url.txt').trim()
+                    if (!target) {
+                        error "No APP_URL — cannot run ZAP scan"
+                    }
+                    sh """
+                        docker run --rm \
+                        -v \$WORKSPACE:/zap/wrk/:rw \
+                        ghcr.io/zaproxy/zaproxy:stable \
+                        zap-baseline.py \
+                        -t https://${target} \
+                        -r ${ZAP_REPORT} \
+                        -I \
+                        -m 5
+                    """
+                    }
+                }
+                }
+
 
 
             stage('Publish ZAP Report') {
