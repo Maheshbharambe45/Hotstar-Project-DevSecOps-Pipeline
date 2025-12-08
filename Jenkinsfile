@@ -72,23 +72,26 @@
 
             stage('Deploy to EKS') {
                 steps {
-                    sh """
-                        aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                        kubectl apply -f deployment.yml
-                        kubectl apply -f service.yml
-                        
-                        sleep 120
-
-                        # Get the app URL
-                        APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-                        echo "App URL: \$APP_URL"
-                        echo \$APP_URL > app_url.txt
-                    """
                     script {
+                        sh """
+                            aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+                            kubectl apply -f deployment.yml
+                            kubectl apply -f service.yml
+
+                            sleep 120
+
+                            # Get the app URL
+                            APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+                            echo \$APP_URL > app_url.txt
+                        """
+
+                        // Read the URL from file and set environment variable
                         env.APP_URL = readFile('app_url.txt').trim()
+                        echo "Deployed App URL: ${env.APP_URL}"
                     }
                 }
-            }
+             }
+
 
             stage('OWASP ZAP Scan') {
                 steps {
