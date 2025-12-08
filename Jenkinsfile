@@ -101,14 +101,17 @@
                         error "No APP_URL — cannot run ZAP scan"
                     }
                     sh """
+                        mkdir -p ${WORKSPACE}/zap-output
+                        chmod 777 ${WORKSPACE}/zap-output
+
                         docker run --rm \
-                        -v \$WORKSPACE:/zap/wrk/:rw \
+                        -v ${WORKSPACE}/zap-output:/zap/wrk:rw \
                         ghcr.io/zaproxy/zaproxy:stable \
                         zap-baseline.py \
-                        -t https://${target} \
-                        -r ${ZAP_REPORT} \
-                        -I \
-                        -m 5
+                            -t https://${target} \
+                            -r ${ZAP_REPORT} \
+                            -I \
+                            -m 5
                     """
                     }
                 }
