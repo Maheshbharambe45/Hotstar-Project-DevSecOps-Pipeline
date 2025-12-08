@@ -27,18 +27,21 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                 sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=hotstar-app \
-                    -Dsonar.projectName=hotstar-app \
-                    -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/**,**/build/** \
-                    -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                    -Dsonar.host.url=http://3.111.96.69:9000 \
-                    -Dsonar.login=$SONAR_TOKEN
+                    docker run --rm \
+                        -e SONAR_HOST_URL=http://3.111.96.69:9000 \
+                        -e SONAR_LOGIN=$SONAR_TOKEN \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=hotstar-app \
+                        -Dsonar.projectName=hotstar-app \
+                        -Dsonar.sources=src \
+                        -Dsonar.exclusions=**/node_modules/**,**/build/** \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
                 '''
             }
         }
     }
+
 
 
         stage('Build Docker Image') {
