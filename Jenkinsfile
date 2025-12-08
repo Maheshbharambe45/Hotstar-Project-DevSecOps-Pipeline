@@ -51,7 +51,7 @@
 
             stage('Docker Scout Scan') {
                 steps {
-                    sh "docker scout cves ${DOCKER_IMAGE} || true"
+                    sh "docker scout cves ${DOCKER_IMAGE}:latest || true"
                 }
             }
 
@@ -71,44 +71,40 @@
             }
 
             stage('Deploy to EKS') {
-                steps {
-                script {
+            steps {
                 sh """
-                    aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                    kubectl apply -f deployment.yml
-                    kubectl apply -f service.yml
-                    sleep 120
-                    APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-                    echo \$APP_URL > app_url.txt
-                    ls -la
-                    cat app_url.txt
+                aws eks update‑kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+                kubectl apply -f deployment.yml
+                kubectl apply -f service.yml
+                sleep 120
+                kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
                 """
-                    sh 'cat app_url.txt'
-                    def url = readFile('app_url.txt').trim()
-                    if (!url) {
-                        error "Service hostname not found. Aborting."
-                    }
-                    env.APP_URL =  readFile('app_url.txt').trim()
-                    echo "Deployed App URL: ${env.APP_URL}"
-
+                script {
+                def url = readFile('app_url.txt').trim()
+                if (!url) {
+                    error "Service hostname not found — APP_URL is empty"
+                }
+                env.APP_URL = url
+                echo "Deployed App URL: ${env.APP_URL}"
                 }
             }
             }
 
             stage('OWASP ZAP Scan') {
-                steps {
+            steps {
                 sh """
-                    docker run --rm \
-                    -v $WORKSPACE:/zap/wrk/:rw \
+                docker run --rm \
+                    -v \$WORKSPACE:/zap/wrk/:rw \
                     ghcr.io/zaproxy/zaproxy:stable \
                     zap-baseline.py \
-                    -t https://$APP_URL \
-                    -r ${ZAP_REPORT} \
+                    -t https://\$APP_URL \
+                    -r \$ZAP_REPORT \
                     -I \
                     --maxduration 5
                 """
             }
             }
+
 
             stage('Publish ZAP Report') {
                 steps {
