@@ -46,7 +46,7 @@ docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
   - A **project key** configured: `hotstar-app`.
   - A **Sonar token** with analysis permissions.
 
-![Website Screenshot](assets/Screenshot%202025-12-08%20191838.png)
+![Website Screenshot](assets/Screenshot-2025-12-08-191838.png)
 
 - **Docker Hub**
   - Account : maheshbharambe45  After image will push on these account.
@@ -116,7 +116,7 @@ Results accessible at:
 ```bash
 http://3.111.96.69:9000/dashboard?id=hotstar-app
 ```
-[![Watch the Demo](./assets/Screenshot-2025-12-08-191838.png)](./assets/Screen-Recording-2025-12-08-192152.mp4.mp4)
+[![Watch the Demo](./assets/Screenshot-2025-12-08-191838.png)](./assets/Screen-Recording-2025-12-08-192152.mp4)
 
 ### 5️⃣ Build Docker Image
 
@@ -231,7 +231,7 @@ Open in browser:
 http://<elb-hostname>.ap-south-1.elb.amazonaws.com
 
 ```
-[![Watch the Demo](./assets/Screenshot-2025-12-08-192504.png.png)](./assets/Screen-Recording-2025-12-08-192539.mp4.mp4)
+[![Watch the Demo](./assets/Screenshot-2025-12-08-192504.png)](./assets/Screen-Recording-2025-12-08-192539.mp4)
 
 
 ## 🔒 Security Improvements 
