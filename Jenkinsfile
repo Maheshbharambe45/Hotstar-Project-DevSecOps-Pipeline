@@ -72,52 +72,46 @@
 
             stage('Deploy to EKS') {
                 steps {
-                    script {
-                        sh """
-                            aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                            kubectl apply -f deployment.yml
-                            kubectl apply -f service.yml
-
-                            sleep 120
-
-                            # Get the app URL
-                            APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-                            echo \$APP_URL > app_url.txt
-                        """
-
-                        // Read the URL from file and set environment variable
-                        env.APP_URL = readFile('app_url.txt').trim()
-                        echo "Deployed App URL: ${env.APP_URL}"
-                    }
+                script {
+                sh """
+                    aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+                    kubectl apply -f deployment.yml
+                    kubectl apply -f service.yml
+                    sleep 120
+                    APP_URL=\$(kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+                    echo \$APP_URL > app_url.txt
+                """
+                env.APP_URL = readFile('app_url.txt').trim()
+                echo "Deployed App URL: ${env.APP_URL}"
                 }
-             }
-
+            }
+            }
 
             stage('OWASP ZAP Scan') {
                 steps {
-                    sh """
-                    docker run --rm \
+                sh """
+                docker run --rm \
                     -v $WORKSPACE:/zap/wrk/:rw \
                     ghcr.io/zaproxy/zaproxy:stable \
                     zap-baseline.py \
-                    -t ${APP_URL} \
+                    -t ${env.APP_URL} \
                     -r ${ZAP_REPORT} \
                     --exitcode 0 --maxduration 5
-                    """
-                }
+                """
+            }
             }
 
             stage('Publish ZAP Report') {
                 steps {
-                    publishHTML(target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: '.',
-                        reportFiles: "${ZAP_REPORT}",
-                        reportName: 'OWASP ZAP Report'
-                    ])
-                }
+                publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: '.',
+                reportFiles: "${ZAP_REPORT}",
+                reportName: 'OWASP ZAP Report'
+                ])
+            }
             }
 
         }
