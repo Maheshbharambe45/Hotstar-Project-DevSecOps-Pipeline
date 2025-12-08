@@ -7,6 +7,7 @@ pipeline {
         ZAP_REPORT = 'zap_report.html'
         SONAR_HOST = 'http://3.111.96.69:9000'
         SONAR_TOKEN = credentials('SONAR_TOKEN')
+        NODE_OPTIONS = "--experimental-vm-modules"
     }
 
     stages {
@@ -20,7 +21,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npm test -- --coverage --watchAll=false --passWithNoTests || true'
+                sh 'npx test'
             }
         }
 
