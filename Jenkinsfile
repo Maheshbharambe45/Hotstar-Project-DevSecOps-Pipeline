@@ -51,7 +51,9 @@
 
             stage('Docker Scout Scan') {
                 steps {
-                    sh "docker scout cves ${DOCKER_IMAGE}:latest || true"
+  
+                    sh 'curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b /usr/local/bin'
+                    sh "docker-scout cves ${DOCKER_IMAGE}:latest --exit-code --only-severity critical,high || true"
                 }
             }
 
