@@ -1,16 +1,17 @@
-# 🚀 Implementing a Secure CI/CD Pipeline for Hotstar Clone Using DevSecOps Principles
+## 🚀 Implementing a Secure CI/CD Pipeline for Hotstar Clone Using DevSecOps Principles
 
-### This project implements a secure CI/CD pipeline for a **Hotstar-like streaming application** deployed on **AWS EKS** using **DevSecOps** best practices. It integrates security checks directly into the pipeline to catch vulnerabilities early and enforce secure deployments.
+#### This project implements a secure CI/CD pipeline for a **Hotstar-like streaming application** deployed on **AWS EKS** using **DevSecOps** best practices. It integrates security checks directly into the pipeline to catch vulnerabilities early and enforce secure deployments.
 
 
-### Key security integrations:
+#### Key security integrations:
 - **SonarQube** → Static code analysis 
 - **OWASP ZAP** → Dynamic application security testing 
 - **Docker Scout** → Container image vulnerability scanning
 - **Terraform** → Infrastructure as Code (AWS EKS provisioning)
 - **Jenkins** → Orchestrates CI/CD pipeline
 
-## After creation of Terraform Infrastructure Pipeline we will execute these JOB
+### After creation of Terraform Infrastructure Pipeline we will execute these JOB
+ss of clus
 
 ### Prerequisites on server
 
@@ -35,6 +36,7 @@ Install and configure:
 ### 3. External Services
 
 - **SonarQube Server**
+
   - sonarqube run using the docker container 
 
 ```bash
@@ -114,7 +116,7 @@ Results accessible at:
 ```bash
 http://3.111.96.69:9000/dashboard?id=hotstar-app
 ```
-![Website Screenshot](assets/Screen%20Recording%202025-12-08%20192152.mp4)
+[![Watch the Demo](./assets/Screenshot%202025-12-08%20191838.png)](./assets/Screen%20Recording%202025-12-08%20192152.mp4)
 
 ### 5️⃣ Build Docker Image
 
@@ -227,8 +229,9 @@ Open in browser:
 
 ```bash
 http://<elb-hostname>.ap-south-1.elb.amazonaws.com
+
 ```
-[Click here to watch the demo](assets/Screen%20Recording%202025-12-08%20192539.mp4)
+[![Watch the Demo](./assets/Screenshot%202025-12-08%20192504.png)](./assets/Screen%20Recording%202025-12-08%20192539.mp4)
 
 
 ## 🔒 Security Improvements 
