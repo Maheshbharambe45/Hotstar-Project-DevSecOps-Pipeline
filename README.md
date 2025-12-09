@@ -234,6 +234,9 @@ http://<elb-hostname>.ap-south-1.elb.amazonaws.com
 ```
 [![Watch the Demo](./assets/Screenshot-2025-12-08-192504.png)](./assets/Screen-Recording-2025-12-08-192539.mp4)
 
+<a href="https://youtu.be/6MB212aGIVY" target="_blank">Watch the video</a>
+
+
 
 ## 🔒 Security Improvements 
 
