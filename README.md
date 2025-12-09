@@ -12,7 +12,6 @@
 - **Jenkins** → Orchestrates CI/CD pipeline
 
 ### After creation of Terraform Infrastructure Pipeline we will execute these JOB
-ss of clus
 
 ### Prerequisites on server
 
