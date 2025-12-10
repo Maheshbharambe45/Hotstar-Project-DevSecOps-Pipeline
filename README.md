@@ -12,12 +12,15 @@
 - **Jenkins** → Orchestrates CI/CD pipeline
 
 ### After creation of Terraform Infrastructure Pipeline we will execute these JOB
+<<<<<<< HEAD
 
 ![Website Screenshot](assets/Screenshot%202025-12-10%20215457.png)
 
 <a href="https://github.com/Maheshbharambe45/Jenkins-Terraform-EKS" target="_blank">Repo Of Cluster Automation</a>
 
 
+=======
+>>>>>>> ff951721854d04ee88d9ccec263a47d0ffa6514c
 
 ### Prerequisites on server
 
