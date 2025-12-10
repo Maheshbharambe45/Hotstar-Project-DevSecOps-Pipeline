@@ -12,7 +12,12 @@
 - **Jenkins** → Orchestrates CI/CD pipeline
 
 ### After creation of Terraform Infrastructure Pipeline we will execute these JOB
-ss of clus
+
+![Website Screenshot](assets/Screenshot%202025-12-10%20215457.png)
+
+<a href="https://github.com/Maheshbharambe45/Jenkins-Terraform-EKS" target="_blank">Repo Of Cluster Automation</a>
+
+
 
 ### Prerequisites on server
 
@@ -236,6 +241,9 @@ http://<elb-hostname>.ap-south-1.elb.amazonaws.com
 
 <a href="https://youtu.be/6MB212aGIVY" target="_blank">Watch the video</a>
 
+#### Pipeline's Both Successful
+
+![Website Screenshot](assets/Screenshot%202025-12-10%20215630.png)
 
 
 ## 🔒 Security Improvements 
