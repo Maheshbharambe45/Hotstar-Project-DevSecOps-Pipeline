@@ -86,15 +86,16 @@
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
                         sh """
-                            ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP << EOF
-                            aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                            kubectl apply -f deployment.yml
-                            kubectl apply -f service.yml
-                            EOF
-                            """
+                        ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "
+                        aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks &&
+                        kubectl apply -f deployment.yml &&
+                        kubectl apply -f service.yml
+                        "
+                        """
                     }
                 }
             }
+
 
             stage('Fetch App URL') {
                 steps {
