@@ -104,6 +104,7 @@
                             env.APP_URL = sh(
                                 script: """
                                 ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP \
+                                sleep 120 &&
                                 kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
                                 """,
                                 returnStdout: true
