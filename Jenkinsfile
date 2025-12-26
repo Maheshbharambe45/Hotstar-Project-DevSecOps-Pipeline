@@ -89,6 +89,18 @@
                 }
             }
             
+            stage('Fetch App URL') {
+                steps {
+                    script {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
+                            env.APP_URL = sh(
+                                script: "ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${REMOTE_IP} kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'",
+                                returnStdout: true
+                            ).trim()
+                        }
+                    }
+                }
+}
 
             // stage('Deploy to EKS') {
             //     steps {
