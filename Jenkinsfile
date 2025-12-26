@@ -114,27 +114,6 @@
             }
 
 
-            // stage('Deploy to EKS') {
-            //     steps {
-            //         script {
-            //         sh """
-            //             aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-            //             kubectl apply -f deployment.yml
-            //             kubectl apply -f service.yml
-            //             sleep 120
-            //             kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
-            //         """
-
-            //         def url = readFile('app_url.txt').trim()
-            //         if (!url) {
-            //             error "Service hostname not found — aborting"
-            //         }
-            //         echo "Deployed App URL: ${url}"
-            //         env.APP_URL = url   
-            //         }
-            //     }
-            //     }
-
             stage('OWASP ZAP Scan') {
                 steps {
                     script {
@@ -157,7 +136,7 @@
                     """
                     }
                 }
-                }
+            }
 
 
 
