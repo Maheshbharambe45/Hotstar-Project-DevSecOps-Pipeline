@@ -2,7 +2,7 @@
         agent any
 
         environment {
-            // APP_URL = ''
+            REMOTE_IP = "43.204.176.26" //DEPLOY MACHINE
             DOCKER_IMAGE = "maheshbharambe45/hotstar-app"
             ZAP_REPORT = 'zap_report.html'
             SONAR_HOST = 'http://3.111.96.69:9000'
@@ -72,26 +72,44 @@
                 }
             }
 
-            stage('Deploy to EKS') {
+            stage('Copy Manifests') {
                 steps {
-                    script {
-                    sh """
-                        aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
-                        kubectl apply -f deployment.yml
-                        kubectl apply -f service.yml
-                        sleep 120
-                        kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
-                    """
+                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
+                        sh "scp -i $SSH_KEY -o StrictHostKeyChecking=no deployment.yml service.yml ubuntu@${REMOTE_IP}:/home/ubuntu/"
+                    }
+                }
+            }
 
-                    def url = readFile('app_url.txt').trim()
-                    if (!url) {
-                        error "Service hostname not found — aborting"
-                    }
-                    echo "Deployed App URL: ${url}"
-                    env.APP_URL = url   
+            stage('Deploy Application') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
+                        sh "ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${REMOTE_IP} kubectl apply -f deployment.yml"
+                        sh "ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${REMOTE_IP} kubectl apply -f service.yml"
                     }
                 }
-                }
+            }
+            
+
+            // stage('Deploy to EKS') {
+            //     steps {
+            //         script {
+            //         sh """
+            //             aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks
+            //             kubectl apply -f deployment.yml
+            //             kubectl apply -f service.yml
+            //             sleep 120
+            //             kubectl get svc hotstar-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' > app_url.txt
+            //         """
+
+            //         def url = readFile('app_url.txt').trim()
+            //         if (!url) {
+            //             error "Service hostname not found — aborting"
+            //         }
+            //         echo "Deployed App URL: ${url}"
+            //         env.APP_URL = url   
+            //         }
+            //     }
+            //     }
 
             stage('OWASP ZAP Scan') {
                 steps {
