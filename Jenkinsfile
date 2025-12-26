@@ -75,7 +75,7 @@
             stage('Copy Manifests') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
-                        sh 'scp -i "$SSH_KEY" -o StrictHostKeyChecking=no deployment.yml service.yml ubuntu@'"$REMOTE_IP"':/home/ubuntu/'
+                        sh "scp -i $SSH_KEY -o StrictHostKeyChecking=no deployment.yml service.yml ubuntu@${REMOTE_IP}:/home/ubuntu/"
                     }
                 }
             }
@@ -83,6 +83,7 @@
             stage('Deploy Application') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
+                        sh "aws eks update-kubeconfig --name hotstar-eks --region ap-south-1 --alias hotstar-eks"
                         sh "ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${REMOTE_IP} kubectl apply -f deployment.yml"
                         sh "ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${REMOTE_IP} kubectl apply -f service.yml"
                     }
