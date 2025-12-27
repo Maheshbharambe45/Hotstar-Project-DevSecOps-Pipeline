@@ -19,9 +19,11 @@ spec:
       labels: 
         app: hotstar
     spec:
+      restartPolicy: Always
       containers:
         - name: hotstar-cont
           image: maheshbharambe45/hotstar-app:latest
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
+          
