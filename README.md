@@ -2,7 +2,7 @@
 
 #### This project implements a secure CI/CD pipeline for a **Hotstar-like streaming application** deployed on **AWS EKS** using **DevSecOps** best practices. It integrates security checks directly into the pipeline to catch vulnerabilities early and enforce secure deployments.
 
-![Website Screenshot](assets/Screenshot%202025-12-08%20201126.png)
+![Website Screenshot](assets/Untitled%20Diagram.drawio%20(1).png)
 
 #### Key security integrations:
 - **SonarQube** → Static code analysis 
