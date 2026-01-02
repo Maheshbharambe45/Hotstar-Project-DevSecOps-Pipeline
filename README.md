@@ -246,6 +246,10 @@ http://<elb-hostname>.ap-south-1.elb.amazonaws.com
 ![Website Screenshot](assets/Screenshot%202025-12-10%20215630.png)
 
 
+#### Monitoring using prometheus and grafana [HELM]
+
+![Website Screenshot](assets/Screenshot%202026-01-02%20111115.png)
+
 ## 🔒 Security Improvements 
 
 - Fix **Docker Scout–reported vulnerabilities** by updating vulnerable NPM packages to their patched versions.
