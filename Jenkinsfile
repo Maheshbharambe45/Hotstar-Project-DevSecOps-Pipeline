@@ -64,9 +64,17 @@
 
             stage('Docker Scout Scan') {
                 steps {
-  
-                    sh 'curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b $WORKSPACE/.docker-plugins'
-                    sh "$WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest "
+                     sh '''
+                    # Create writable cache directory
+                    mkdir -p $WORKSPACE/.docker-scout-cache
+                    export DOCKER_SCOUT_CACHE_DIR=$WORKSPACE/.docker-scout-cache
+
+                    # Install Docker Scout CLI
+                    curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b $WORKSPACE/.docker-plugins
+
+                    # Run CVE scan
+                    $WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest
+                '''
                 }
             }
 
