@@ -41,6 +41,14 @@
             }
         }
 
+             stage('Docker Login') {
+                steps {
+                   withCredentials([usernamePassword(
+                    credentialsId: 'docker-credentials',
+                    usernameVariable: 'MY_DOCKER_USER',
+                    passwordVariable: 'MY_DOCKER_PASS'
+                )])}
+            }
 
 
             stage('Build Docker Image') {
