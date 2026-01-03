@@ -41,13 +41,18 @@
             }
         }
 
-             stage('Docker Login') {
+            stage('Docker Login') {
                 steps {
-                   withCredentials([usernamePassword(
-                    credentialsId: 'docker-credentials',
-                    usernameVariable: 'MY_DOCKER_USER',
-                    passwordVariable: 'MY_DOCKER_PASS'
-                )])}
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-credentials',
+                        usernameVariable: 'MY_DOCKER_USER',
+                        passwordVariable: 'MY_DOCKER_PASS'
+                    )]) {
+                        sh '''
+                            echo "$MY_DOCKER_PASS" | docker login -u "$MY_DOCKER_USER" --password-stdin
+                        '''
+                    }
+                }
             }
 
 
