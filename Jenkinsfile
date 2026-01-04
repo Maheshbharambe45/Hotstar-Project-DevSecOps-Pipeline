@@ -2,7 +2,7 @@
         agent any
 
         environment {
-            REMOTE_IP = "43.204.176.26" //DEPLOY MACHINE
+            REMOTE_IP = credentials('DEPLOY_SERVER') // REMOTE SERVER
             DOCKER_IMAGE = "maheshbharambe45/hotstar-app"
             ZAP_REPORT = 'zap_report.html'
             SONAR_HOST = 'http://3.111.96.69:9000'
@@ -12,34 +12,28 @@
 
         stages {
 
-            stage('check_files') {
-                steps {
-                    sh 'ls -l'  
-                }
-            }
-
             stage('Install Dependencies') {
                 steps {
                     sh 'npm install'
                 }
             }
 
-        stage('SonarQube Scan') {
-            steps {
-                sh '''
-                docker run --rm \
-                    -e SONAR_HOST_URL=$SONAR_HOST \
-                    -e SONAR_LOGIN=$SONAR_TOKEN \
-                    -v $(pwd):/usr/src \
-                    sonarsource/sonar-scanner-cli \
-                    -Dsonar.projectKey=hotstar-app \
-                    -Dsonar.projectName=hotstar-app \
-                    -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/**,**/build/** \
-                    -Dsonar.login=$SONAR_TOKEN
-                '''
+            stage('SonarQube Scan') {
+                steps {
+                    sh '''
+                    docker run --rm \
+                        -e SONAR_HOST_URL=$SONAR_HOST \
+                        -e SONAR_LOGIN=$SONAR_TOKEN \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=hotstar-app \
+                        -Dsonar.projectName=hotstar-app \
+                        -Dsonar.sources=src \
+                        -Dsonar.exclusions=**/node_modules/**,**/build/** \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
             }
-        }
 
             stage('Docker Login') {
                 steps {
@@ -65,14 +59,13 @@
             stage('Docker Scout Scan') {
                 steps {
                      sh '''
-                    # Create writable cache directory
+                    # Create cache directory and set environment variable for Docker Scout
+
                     mkdir -p $WORKSPACE/.docker-scout-cache
                     export DOCKER_SCOUT_CACHE_DIR=$WORKSPACE/.docker-scout-cache
 
-                    # Install Docker Scout CLI
                     curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b $WORKSPACE/.docker-plugins
 
-                    # Run CVE scan
                     $WORKSPACE/.docker-plugins/docker-scout cves ${DOCKER_IMAGE}:latest
                 '''
                 }
@@ -135,7 +128,6 @@
                 }
             }
 
-
             stage('OWASP ZAP Scan') {
                 steps {
                     script {
@@ -160,8 +152,6 @@
                 }
             }
 
-
-
             stage('Publish ZAP Report') {
                 steps {
                 publishHTML(target: [
@@ -175,11 +165,5 @@
             }
             }
 
-        }
-
-        post {
-            always {
-                archiveArtifacts artifacts: '**/zap_report.html', allowEmptyArchive: true
-            }
         }
     }
