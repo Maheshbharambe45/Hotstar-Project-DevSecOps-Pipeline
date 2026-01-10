@@ -34,7 +34,7 @@ function Footer() {
                     <i className="fa-brands fa-twitter"></i>
                 </div>
                 <div className='emg'>
-                    <img src="https://o.remove.bg/downloads/6da3e562-e93e-46f4-bfa3-b9efd2809260/png-clipart-google-play-app-store-apple-apple-text-rectangle-removebg-preview.png" alt="" />
+                    <img src="https://1000logos.net/wp-content/uploads/2021/07/Google-Play-Logo-768x432.png" alt="Get on Google Play" />
 
                 </div>
 
