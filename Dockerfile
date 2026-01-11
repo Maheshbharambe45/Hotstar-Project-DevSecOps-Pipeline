@@ -6,7 +6,9 @@ COPY package*.json ./
 
 RUN npm ci --only=production
 
-COPY . .
+
+COPY src ./src
+COPY public ./public
 
 EXPOSE 3000
 
