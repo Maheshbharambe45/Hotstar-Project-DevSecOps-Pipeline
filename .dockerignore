@@ -1,4 +1,30 @@
+# Node.js projects
 node_modules
 npm-debug.log
+yarn-error.log
+
+# Python projects
+__pycache__
+*.pyc
+venv
+.venv
+
+# Git
 .git
+.gitignore
+
+# Build / dist folders
+dist
+build
+coverage
+
+# IDE / OS files
+.vscode
+.idea
+*.swp
 .DS_Store
+
+# Any large files you don’t need in the image
+*.log
+*.mp4
+*.zip
