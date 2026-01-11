@@ -59,7 +59,7 @@
 
             stage('Build Docker Image') {
                 steps {
-                    sh "docker build -t ${DOCKER_IMAGE} -f ./n/Dockerfile ./n"
+                    sh "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
 
