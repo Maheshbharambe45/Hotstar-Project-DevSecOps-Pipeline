@@ -24,7 +24,14 @@ coverage
 *.swp
 .DS_Store
 
-# Any large files you don’t need in the image
+# Large files you don’t need
 *.log
 *.mp4
 *.zip
+
+# Extra large folders on your system
+.aws
+.ZAP
+.cache
+.docker
+.terraform.d

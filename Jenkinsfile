@@ -19,6 +19,11 @@
             }
 
             
+            stage('Build Application') {
+                steps {
+                    sh 'npm run build'
+                }
+            }
 
             stage('SonarQube Scan') {
                 steps {
