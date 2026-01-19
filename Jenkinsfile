@@ -29,7 +29,7 @@
 
             stage('Install Dependencies') {
                 steps {
-                    sh 'npm ci '
+                    sh 'npm install'
                 }
             }
 
