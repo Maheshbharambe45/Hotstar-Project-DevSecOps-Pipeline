@@ -137,26 +137,22 @@
                         sh '''
                         ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "
                             sleep 60
-                            echo '--------------------'
+                            echo '--------pod------------'
                             kubectl get pods -o wide
                             echo '--------------------'
 
-                            echo '--------------------'
+                            echo '--------service------------'
                             kubectl get svc
                             echo '--------------------'
 
-                            echo '--------------------'
+                            echo '-------deploy-------------'
                             kubectl get deploy
                             echo '--------------------'
 
-                            echo '--------------------'
+                            echo '---------rollout status-----------'
                             kubectl rollout status deployment/hotstar-deployment
                             echo '--------------------'
-                            
-                            POD=\$(kubectl get pods -l app=hotstar-deployment -o jsonpath='{.items[0].metadata.name}')
-                            echo '--------------------'
-                            kubectl logs \$POD --tail=50
-                            echo '--------------------'
+
                         "
                         '''
                     }
@@ -182,13 +178,16 @@
 
             stage('OWASP ZAP Scan') {
                 steps {
-                    sh '''
-                    mkdir -p zap-output
-                    docker run --rm \
-                    -v $(pwd)/zap-output:/zap/wrk \
-                    ghcr.io/zaproxy/zaproxy:stable \
-                    zap-baseline.py -t http://${APP_URL} -r ${ZAP_REPORT}
-                    '''
+                    script {
+                        sh """
+                        mkdir -p zap-output
+                        docker run --rm \\
+                            -v \$(pwd)/zap-output:/zap/wrk \\
+                            --user \$(id -u):\$(id -g) \\
+                            ghcr.io/zaproxy/zaproxy:stable \\
+                            zap-baseline.py -t http://${env.APP_URL} -r ${env.ZAP_REPORT}
+                        """
+                    }
                 }
             }
 
@@ -196,13 +195,13 @@
                 steps {
                     publishHTML(target: [
                         reportDir: 'zap-output',
-                        reportFiles: "${ZAP_REPORT}",
+                        reportFiles: "${env.ZAP_REPORT}",
                         reportName: 'OWASP ZAP Report'
                     ])
-                    archiveArtifacts artifacts: "zap-output/${ZAP_REPORT}"
+                    archiveArtifacts artifacts: "zap-output/${env.ZAP_REPORT}"
                 }
             }
-        }
+
 
         post {
             success {
