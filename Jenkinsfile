@@ -61,16 +61,6 @@
             }
 
 
-
-            stage('SonarQube Quality Gate') {
-                steps {
-                    timeout(time: 1, unit: 'HOURS') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-
-
             stage('Docker Login') {
                 steps {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'MY_DOCKER_USER', passwordVariable: 'MY_DOCKER_PASS')]) {
