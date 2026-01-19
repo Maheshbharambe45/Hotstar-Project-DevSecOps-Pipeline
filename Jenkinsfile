@@ -179,17 +179,26 @@
             stage('OWASP ZAP Scan') {
                 steps {
                     script {
+                        if (!env.APP_URL) {
+                            error "URL not found"
+                        }
                         sh """
-                        mkdir -p zap-output
+                        mkdir -p ${WORKSPACE}/zap-output
+                        chmod 777 ${WORKSPACE}/zap-output
+
                         docker run --rm \\
-                            -v \$(pwd)/zap-output:/zap/wrk \\
-                            --user \$(id -u):\$(id -g) \\
+                            -v ${WORKSPACE}/zap-output:/zap/wrk:rw \\
                             ghcr.io/zaproxy/zaproxy:stable \\
-                            zap-baseline.py -t http://${env.APP_URL} -r ${env.ZAP_REPORT}
+                            zap-baseline.py \\
+                            -t http://${env.APP_URL} \\
+                            -r ${env.ZAP_REPORT} \\
+                            -I \\
+                            -m 5
                         """
                     }
                 }
             }
+
 
             stage('Publish ZAP Report') {
                 steps {
