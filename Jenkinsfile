@@ -40,33 +40,29 @@
             }
 
 
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv('Sonarqube') {
-                    sh """
-                    docker run --rm \
-                    -e SONAR_HOST_URL=$SONAR_HOST_URL \
-                    -e SONAR_TOKEN=$SONAR_TOKEN \
-                    -v $WORKSPACE:/usr/src/app \
-                    -w /usr/src/app \
-                    sonarsource/sonar-scanner-cli \
-                    -Dsonar.projectKey=hotstar-app \
-                    -Dsonar.projectName=hotstar-app \
-                    -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/**,**/build/** \
-                    -Dsonar.report.export.path=/usr/src/app/report-task.txt
-
-                    echo "Checking for report-task.txt..."
-                    ls -l /usr/src/app/report-task.txt
-                    """
+            stage('SonarQube Scan') {
+                steps {
+                    withSonarQubeEnv('Sonarqube') {
+                        sh """
+                        docker run --rm \
+                        -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                        -e SONAR_TOKEN=$SONAR_TOKEN \
+                        -v $WORKSPACE:/usr/src/app \
+                        -w /usr/src/app \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=hotstar-app \
+                        -Dsonar.projectName=hotstar-app \
+                        -Dsonar.sources=src \
+                        -Dsonar.exclusions=**/node_modules/**,**/build/**
+                        """
+                    }
                 }
             }
-        }
 
 
-            stage('Sonar Quality Gate') {
+            stage('SonarQube Quality Gate') {
                 steps {
-                    timeout(time: 5, unit: 'MINUTES') {
+                    timeout(time: 1, unit: 'HOURS') {
                         waitForQualityGate abortPipeline: true
                     }
                 }
