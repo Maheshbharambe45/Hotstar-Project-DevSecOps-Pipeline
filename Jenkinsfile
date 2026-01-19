@@ -20,9 +20,10 @@
         stages {
 
             stage('Checkout') {
-                steps {
-                    git url: 'https://github.com/Maheshbharambe45/Hotstar-Project-DevSecOps-Pipeline.git'
-                    sh 'ls -l'
+                        steps {
+                            git branch: 'main',
+                                url: 'https://github.com/Maheshbharambe45/Hotstar-Project-DevSecOps-Pipeline.git'
+                            sh 'ls -l'
                 }
             }
 
