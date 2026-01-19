@@ -38,21 +38,21 @@
                     sh 'npm run build'
                 }
             }
-
             stage('SonarQube Scan') {
                 steps {
-                    sh '''
-                    docker run --rm \
-                    -e SONAR_HOST_URL=$SONAR_HOST \
-                    -e SONAR_LOGIN=$SONAR_TOKEN \
-                    -v $(pwd):/usr/src \
-                    sonarsource/sonar-scanner-cli \
-                    -Dsonar.projectKey=hotstar-app \
-                    -Dsonar.projectName=hotstar-app \
-                    -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/**,**/build/** \
-                    -Dsonar.login=$SONAR_TOKEN
-                    '''
+                    withSonarQubeEnv('MySonarQubeServer') { 
+                        sh """
+                            docker run --rm \
+                            -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                            -e SONAR_TOKEN=$SONAR_TOKEN \
+                            -v $WORKSPACE:/usr/src \
+                            sonarsource/sonar-scanner-cli \
+                            -Dsonar.projectKey=hotstar-app \
+                            -Dsonar.projectName=hotstar-app \
+                            -Dsonar.sources=src \
+                            -Dsonar.exclusions=**/node_modules/**,**/build/**
+                        """
+                    }
                 }
             }
 
