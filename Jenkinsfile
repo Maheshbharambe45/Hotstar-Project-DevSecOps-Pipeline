@@ -44,16 +44,22 @@
                 steps {
                     withSonarQubeEnv('Sonarqube') {
                         sh """
-                        sonar-scanner \
+                        docker run --rm \
+                        -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                        -e SONAR_TOKEN=$SONAR_TOKEN \
+                        -v $WORKSPACE:/usr/src/app \
+                        -w /usr/src/app \
+                        sonarsource/sonar-scanner-cli \
                         -Dsonar.projectKey=hotstar-app \
                         -Dsonar.projectName=hotstar-app \
                         -Dsonar.sources=src \
-                        -Dsonar.exclusions=**/node_modules/**,**/build/**
+                        -Dsonar.exclusions=**/node_modules/**,**/build/** \
+                        -Dsonar.java.binaries=. \
+                        -Dsonar.projectBaseDir=/usr/src/app
                         """
                     }
                 }
             }
-
 
 
             stage('SonarQube Quality Gate') {
