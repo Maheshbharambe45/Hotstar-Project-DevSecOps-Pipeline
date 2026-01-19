@@ -40,7 +40,7 @@
             }
             stage('SonarQube Scan') {
                 steps {
-                    withSonarQubeEnv('MySonarQubeServer') { 
+                    withSonarQubeEnv('Sonarqube') { 
                         sh """
                             docker run --rm \
                             -e SONAR_HOST_URL=$SONAR_HOST_URL \
