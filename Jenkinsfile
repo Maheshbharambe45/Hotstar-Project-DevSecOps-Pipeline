@@ -44,15 +44,16 @@
                     withSonarQubeEnv('Sonarqube') {
                         sh """
                         docker run --rm \
-                        -e SONAR_HOST_URL=$SONAR_HOST_URL \
-                        -e SONAR_TOKEN=$SONAR_TOKEN \
-                        -v $WORKSPACE:/usr/src \
+                        -e SONAR_HOST_URL=${env.SONAR_HOST_URL} \
+                        -e SONAR_TOKEN=${env.SONAR_TOKEN} \
+                        -v ${env.WORKSPACE}:/usr/src \
                         -w /usr/src \
                         sonarsource/sonar-scanner-cli \
                         -Dsonar.projectKey=hotstar-app \
                         -Dsonar.projectName=hotstar-app \
                         -Dsonar.sources=src \
-                        -Dsonar.exclusions=**/node_modules/**,**/build/**
+                        -Dsonar.exclusions=**/node_modules/**,**/build/** \
+                        -Dsonar.report.export.path=/usr/src/report-task.txt
                         """
                     }
                 }
