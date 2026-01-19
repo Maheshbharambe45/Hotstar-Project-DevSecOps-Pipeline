@@ -202,7 +202,7 @@
                 }
             }
 
-
+        }
         post {
             success {
                 echo "Pipeline completed successfully"
@@ -214,5 +214,5 @@
                 echo "Pipeline execution finished"
             }
         }
-    }
+    
 }
