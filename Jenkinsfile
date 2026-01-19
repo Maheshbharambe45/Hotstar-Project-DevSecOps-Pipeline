@@ -136,22 +136,33 @@
                     withCredentials([sshUserPrivateKey(credentialsId: 'SSH', keyFileVariable: 'SSH_KEY')]) {
                         sh '''
                         ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "
-                        sleep 60
-                        kubectl get pods -o wide
-                        echo "--------------------------------"
-                        kubectl get svc
-                        echo "--------------------------------"
-                        kubectl get deploy
-                        echo "--------------------------------"
-                        kubectl rollout status deployment/hotstar-app
-                        echo "--------------------------------"
-                        POD=\$(kubectl get pods -l app=hotstar -o jsonpath='{.items[0].metadata.name}')
-                        kubectl logs \$POD --tail=50
+                            sleep 60
+                            echo '--------------------'
+                            kubectl get pods -o wide
+                            echo '--------------------'
+
+                            echo '--------------------'
+                            kubectl get svc
+                            echo '--------------------'
+
+                            echo '--------------------'
+                            kubectl get deploy
+                            echo '--------------------'
+
+                            echo '--------------------'
+                            kubectl rollout status deployment/hotstar-deployment
+                            echo '--------------------'
+                            
+                            POD=\$(kubectl get pods -l app=hotstar-deployment -o jsonpath='{.items[0].metadata.name}')
+                            echo '--------------------'
+                            kubectl logs \$POD --tail=50
+                            echo '--------------------'
                         "
                         '''
                     }
                 }
             }
+
 
             stage('Fetch App URL') {
                 steps {
