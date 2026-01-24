@@ -16,13 +16,13 @@ spec:
       app: hotstar
   template:
     metadata:
-      labels: 
+      labels:
         app: hotstar
     spec:
       restartPolicy: Always
       containers:
         - name: hotstar-cont
-          image: maheshbharambe45/hotstar-app:latest
+          image: maheshbharambe45/hotstar-app:1.0
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
