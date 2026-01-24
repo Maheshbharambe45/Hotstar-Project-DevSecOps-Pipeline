@@ -180,7 +180,7 @@
                 steps {
                     script {
                         if (!env.APP_URL) {
-                            error "URL not found"
+                            error "URL not found. Cannot perform ZAP scan."
                         }
                         sh """
                         mkdir -p ${WORKSPACE}/zap-output
